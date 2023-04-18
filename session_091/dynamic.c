@@ -11,4 +11,7 @@ void test_1(void)
     int a[5] ;
     int *pa;
     pa = a ;
+
+    int *b[5];
+    
 }
