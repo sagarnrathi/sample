@@ -19,12 +19,19 @@ void insert_end(struct node *p_head_node,int n_data);
 int insert_after(struct node *p_head_nnode,int e_data,int n_data);
 int insert_before(struct node *p_head_nnode,int e_data,int n_data);
 
+int pop_start(struct node *p_head_node,int *p_data);
+int pop_end(struct node *p_head_node,int *p_data);
+
+int remove_start(struct node *p_head_node);
+int remove_end(struct node *p_head_node);
+int remove_data(struct node * p_head_node,int e_data);
+
 
 struct node * create_list()
 {
     struct node * p_head_node = NULL ;
     p_head_node = (struct node *) malloc(sizeof(struct node));
-    p_head_node-> data = 0;
+    p_head_node -> data = 0;
     p_head_node -> next = p_head_node;
     p_head_node -> prev = p_head_node ;
     
@@ -157,12 +164,126 @@ int insert_before(struct node *p_head_node,int e_data,int n_data)
     return SUCCESS ;
 }
 
+int pop_start(struct node *p_head_node,int *p_data_e)
+{
+ 
+     struct node * p_data = NULL ;
+     p_data = (struct node *)malloc(sizeof(struct node));
+     
+     if(p_data == NULL )
+     {
+        puts("failed to allocate the memory ");
+        exit(EXIT_FAILURE);
+     }
 
+     *p_data_e = p_head_node-> next -> data ;
 
+     p_data = p_head_node -> next ;
+
+     p_data -> next -> prev = p_head_node ;
+     p_head_node ->next = p_data -> next ;
+
+     free(p_data);
+     p_data = NULL;
+
+     return SUCCESS ;
+
+}
+
+int pop_end(struct node *p_head_node,int *p_data_e)
+{
+
+   
+     struct node * p_data = NULL ;
+     p_data = (struct node *)malloc(sizeof(struct node));
+     
+     if(p_data == NULL )
+     {
+        puts("failed to allocate the memory ");
+        exit(EXIT_FAILURE);
+     }
+
+     *p_data_e = p_head_node-> prev -> data ;
+
+     p_data = p_head_node -> prev ;
+
+     p_data -> prev -> next = p_head_node ;
+     p_head_node ->prev = p_data ->prev ;
+
+     free(p_data);
+     p_data = NULL;
+
+     return SUCCESS ;
+
+}
+
+int remove_start(struct node *p_head_node)
+{
+    struct node * p_run = NULL ;
+
+    p_run = (struct node *)malloc(sizeof(struct node));
+
+    p_run = p_head_node ->next;
+
+    p_run -> next -> prev = p_head_node ;
+    p_head_node -> next = p_run -> next ;
+    free(p_run);
+    p_run = NULL ;
+
+    return SUCCESS ;
+}
+
+int remove_end(struct node *p_head_node)
+{
+    struct node * p_run = NULL ;
+
+    p_run = (struct node *)malloc(sizeof(struct node));
+
+    p_run = p_head_node ->prev;
+    printf("%d",p_run ->data);
+    p_run -> prev -> next = p_head_node ;
+    p_head_node -> prev = p_run -> prev ;
+    free(p_run);
+    p_run = NULL ;
+
+    return SUCCESS ;
+
+}
+
+int remove_data(struct node * p_head_node,int e_data)
+{
+    struct node * p_run  = NULL ;
+    p_run = (struct node *) malloc(sizeof(struct node));
+    if(p_run == NULL)
+    {
+        puts("failed to allocate the mem ") ;
+        exit(EXIT_FAILURE);
+    }
+
+   
+    p_run = p_head_node -> next ;
+    while(p_run != p_head_node)
+    {
+        if(p_run -> data == e_data)
+           break;
+        p_run = p_run -> next ;
+    }
+
+    if(p_run == p_head_node)
+    return LIST_DATA_NOT_FOUND ;
+
+   p_run->prev -> next = p_run -> next ;
+   p_run ->next ->prev = p_run -> prev ;
+   free(p_run) ;
+   p_run =NULL;
+   return SUCCESS ;
+}
 int main(void)
 {
     struct node * my_list = NULL;
-    
+    int * p_data = NULL ;
+    p_data = (int *) malloc(sizeof(int ));
+
     my_list = create_list();
     show(my_list,"created");
    
@@ -184,6 +305,33 @@ int main(void)
 
     insert_before(my_list,5000,700);
 
+    insert_before(my_list,5000,1700);
+    insert_before(my_list,5000,1800);
     show(my_list,"inserted 700");
     
+     pop_start(my_list,p_data) ;
+
+     show(my_list,"pop first");
+
+      
+     pop_end(my_list,p_data) ;
+     printf("poped data is %d \n",*p_data);
+     show(my_list,"pop end");
+    
+     remove_start(my_list) ;
+    
+     show(my_list,"remove first");
+
+       remove_end(my_list) ;
+    
+     show(my_list,"remove end");
+
+   
+    remove_data(my_list,700) ;
+    
+     show(my_list,"remove 700");
+
+     
+
+
 }
