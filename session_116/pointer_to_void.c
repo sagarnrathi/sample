@@ -20,7 +20,7 @@ int main(void)
     p = arr ;
     
     printf("%d day is \n",((struct Date *)p)->day);
-    printf("%d month is \n ",((struct Date *)p)->month);
+    printf("%d month is \n",((struct Date *)p)->month);
     printf("%d year is ",((struct Date *)p)-> year) ;
 }
 
